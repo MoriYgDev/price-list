@@ -1,3 +1,4 @@
+// src/components/AdminLayout.tsx
 import React from 'react';
 import { useNavigate, Outlet, Link as RouterLink } from 'react-router-dom';
 import {
@@ -31,7 +32,10 @@ const AdminLayout = () => {
             <CssBaseline />
             <AppBar
                 position="fixed"
-                sx={{ width: `calc(100% - ${drawerWidth}px)`, mr: `${drawerWidth}px` }}
+                sx={{
+                    width: `calc(100% - ${drawerWidth}px)`,
+                    ml: `${drawerWidth}px`, // Use 'mr' for a right-sided drawer
+                }}
             >
                 <Toolbar sx={{ justifyContent: 'space-between' }}>
                     <Typography variant="h6" noWrap component="div">
@@ -39,10 +43,10 @@ const AdminLayout = () => {
                     </Typography>
                     <Box>
                         <Button color="inherit" component={RouterLink} to="/" startIcon={<VisibilityIcon />}>
-                             مشاهده سایت 
+                             مشاهده سایت
                         </Button>
                         <Button color="inherit" onClick={handleLogout} startIcon={<ExitToAppIcon />}>
-                             خروج 
+                             خروج
                         </Button>
                     </Box>
                 </Toolbar>
@@ -58,7 +62,7 @@ const AdminLayout = () => {
                     },
                 }}
                 variant="permanent"
-                anchor="right"
+                anchor="left" // Changed to "left" to move the drawer to the right in RTL
             >
                 <Toolbar />
                 <Box sx={{ overflow: 'auto' }}>
@@ -77,7 +81,6 @@ const AdminLayout = () => {
                 </Box>
             </Drawer>
 
-            {/* Main content area - The `width` property has been removed from here */}
             <Box
                 component="main"
                 sx={{ flexGrow: 1, p: 3 }}

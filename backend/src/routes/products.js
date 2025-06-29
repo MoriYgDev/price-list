@@ -39,7 +39,7 @@ router.get('/:id', async (req, res) => {
 
 // POST /api/products - Create a new product (Admin Only)
 router.post('/', protect, async (req, res) => {
-  const { name, partnerName, registrationDate, price, profitPercentage, description, logoId, brandName, imageUrl } = req.body;
+  const { name, partnerName, registrationDate, price, profitPercentage, description, logoId, brandName } = req.body;
 
   try {
     const brand = await prisma.brand.upsert({
@@ -56,9 +56,8 @@ router.post('/', protect, async (req, res) => {
         price: parseFloat(price),
         profitPercentage: parseFloat(profitPercentage),
         description,
-        imageUrl,
         brandId: brand.id,
-        logoId: parseInt(logoId), 
+        logoId: parseInt(logoId),
       },
       include: { brand: true, logo: true },
     });
@@ -72,7 +71,7 @@ router.post('/', protect, async (req, res) => {
 // PUT /api/products/:id - Update a product (Admin Only)
 router.put('/:id', protect, async (req, res) => {
   const { id } = req.params;
-  const { name, partnerName, registrationDate, price, profitPercentage, description, logoId, brandName, imageUrl } = req.body;
+  const { name, partnerName, registrationDate, price, profitPercentage, description, logoId, brandName } = req.body;
 
   try {
     const brand = await prisma.brand.upsert({
@@ -80,22 +79,21 @@ router.put('/:id', protect, async (req, res) => {
       update: {},
       create: { name: brandName },
     });
-    
-const updatedProduct = await prisma.product.update({
-    where: { id: parseInt(id) },
-    data: {
-        name,
-        partnerName,
-        registrationDate: new Date(registrationDate),
-        price: parseFloat(price),
-        profitPercentage: parseFloat(profitPercentage),
-        description,
-        imageUrl,
-        brandId: brand.id,
-        logoId: parseInt(logoId),
-    },
-    include: { brand: true, logo: true },
-});
+
+    const updatedProduct = await prisma.product.update({
+        where: { id: parseInt(id) },
+        data: {
+            name,
+            partnerName,
+            registrationDate: new Date(registrationDate),
+            price: parseFloat(price),
+            profitPercentage: parseFloat(profitPercentage),
+            description,
+            brandId: brand.id,
+            logoId: parseInt(logoId),
+        },
+        include: { brand: true, logo: true },
+    });
     res.json(updatedProduct);
   } catch (error) {
     console.error(error);

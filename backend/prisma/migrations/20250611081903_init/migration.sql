@@ -27,7 +27,6 @@ CREATE TABLE "Product" (
     "price" REAL NOT NULL,
     "profitPercentage" REAL NOT NULL DEFAULT 30,
     "description" TEXT,
-    "imageUrl" TEXT,
     "createdAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" DATETIME NOT NULL,
     "logoId" INTEGER NOT NULL,

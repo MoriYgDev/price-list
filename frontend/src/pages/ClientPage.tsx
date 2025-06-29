@@ -9,7 +9,7 @@ import {
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import api from '../services/api';
-import type { Product } from '../types'; // CORRECTED IMPORT
+import type { Product } from '../types';
 import moment from 'jalali-moment';
 
 import { useTheme } from '@mui/material/styles';
@@ -27,12 +27,23 @@ const Row = (props: { product: Product }) => {
     const finalPrice = product.price * (1 + product.profitPercentage / 100);
     const formatPrice = (price: number) => new Intl.NumberFormat('fa-IR').format(price) + ' ریال';
     const formatDate = (date: string) => moment(date).locale('fa').format('YYYY/MM/DD');
+    const backendUrl = 'http://localhost:3001';
 
     return (
         <React.Fragment>
             <TableRow sx={{ '& > *': { borderBottom: 'unset' } }} hover onClick={() => setOpen(!open)}>
                 <TableCell><IconButton aria-label="expand row" size="small">{open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}</IconButton></TableCell>
-                <TableCell>{product.logo.name}</TableCell>
+                <TableCell>
+                    <img
+                        src={`${backendUrl}${product.logo.filePath}`}
+                        alt={product.logo.name}
+                        style={{
+                            maxHeight: '40px',
+                            maxWidth: '120px',
+                            verticalAlign: 'middle'
+                        }}
+                    />
+                </TableCell>
                 <TableCell>{product.name}</TableCell>
                 <TableCell>{product.brand.name}</TableCell>
                 <TableCell>{product.partnerName}</TableCell>
@@ -46,7 +57,6 @@ const Row = (props: { product: Product }) => {
                         <Box sx={{ margin: 2 }}>
                             <Typography variant="h6" gutterBottom component="div">توضیحات</Typography>
                             {product.description ? <p>{product.description}</p> : <p>توضیحات موجود نیست.</p>}
-                            {product.imageUrl && <img src={product.imageUrl} alt={product.name} style={{ maxHeight: '150px', borderRadius: '4px', marginTop: '10px' }} />}
                         </Box>
                     </Collapse>
                 </TableCell>

@@ -17,7 +17,6 @@ export interface Product {
   price: number;
   profitPercentage: number;
   description?: string; // Optional field
-  imageUrl?: string;    // Optional field
   logo: Logo;
   brand: Brand;
 }

@@ -19,7 +19,6 @@ interface IFormInputs {
     price: number | '';
     profitPercentage: number;
     description: string;
-    imageUrl: string;
     logoId: number | '';
     registrationDate: Date | null;
 }
@@ -28,7 +27,7 @@ const AddProductPage = () => {
     const { control, handleSubmit, setValue, formState: { errors } } = useForm<IFormInputs>({
         defaultValues: {
             name: '', partnerName: '', price: '', profitPercentage: 30, description: '',
-            imageUrl: '', logoId: '', registrationDate: null,
+            logoId: '', registrationDate: null,
         }
     });
     const navigate = useNavigate();
@@ -54,12 +53,12 @@ const AddProductPage = () => {
                 setLoading(false);
                 return;
             }
-    
+
             const productData = {
                 ...data,
                 brandName: selectedLogo.name,
             };
-    
+
             const token = localStorage.getItem('authToken');
             await api.post('/products', productData, { headers: { Authorization: `Bearer ${token}` } });
             setSnackbar({ open: true, message: 'محصول با موفقیت اضافه شد!', severity: 'success' });
@@ -95,7 +94,7 @@ const AddProductPage = () => {
                     <Grid item xs={12} sm={6}>
                         <Controller name="partnerName" control={control} rules={{ required: 'نام همکار الزامی است' }} render={({ field }) => <TextField {...field} label="نام همکار" fullWidth error={!!errors.partnerName} helperText={errors.partnerName?.message} />} />
                     </Grid>
-                    
+
                     <Grid item xs={12} sm={6}>
                         <Box sx={{ display: 'flex', alignItems: 'flex-start' }}>
                             <Controller
@@ -129,7 +128,7 @@ const AddProductPage = () => {
                             )}
                         />
                     </Grid>
-                    
+
                     <Grid item xs={12} sm={6}>
                         <Controller
                             name="price"
@@ -149,19 +148,15 @@ const AddProductPage = () => {
                             )}
                         />
                     </Grid>
-                    
-                    <Grid item xs={12} sm={6}>
-                        <Controller name="profitPercentage" control={control} rules={{ required: true }} render={({ field }) => <TextField {...field} label="درصد سود" type="number" fullWidth required />} />
-                    </Grid>
 
                     <Grid item xs={12} sm={6}>
-                        <Controller name="imageUrl" control={control} render={({ field }) => <TextField {...field} label="آدرس تصویر محصول (URL)" fullWidth />} />
+                        <Controller name="profitPercentage" control={control} rules={{ required: true }} render={({ field }) => <TextField {...field} label="درصد سود" type="number" fullWidth required />} />
                     </Grid>
 
                     <Grid item xs={12}>
                         <Controller name="description" control={control} render={({ field }) => <TextField {...field} label="توضیحات" multiline rows={4} fullWidth />} />
                     </Grid>
-                    
+
                     <Grid item xs={12}>
                         <Button type="submit" variant="contained" color="primary" disabled={loading}>
                             {loading ? <CircularProgress size={24} /> : 'ذخیره محصول'}
