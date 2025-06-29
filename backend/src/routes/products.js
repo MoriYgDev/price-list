@@ -39,18 +39,14 @@ router.get('/:id', async (req, res) => {
 
 // POST /api/products - Create a new product (Admin Only)
 router.post('/', protect, async (req, res) => {
-  // We now receive logoId instead of logoName
   const { name, partnerName, registrationDate, price, profitPercentage, description, logoId, brandName, imageUrl } = req.body;
 
   try {
-    // We still create the brand on-the-fly if it's new
     const brand = await prisma.brand.upsert({
       where: { name: brandName },
       update: {},
       create: { name: brandName },
     });
-
-    // The old logo upsert logic is REMOVED.
 
     const newProduct = await prisma.product.create({
       data: {
@@ -62,7 +58,7 @@ router.post('/', protect, async (req, res) => {
         description,
         imageUrl,
         brandId: brand.id,
-        logoId: parseInt(logoId), // We use the ID from the request directly
+        logoId: parseInt(logoId), 
       },
       include: { brand: true, logo: true },
     });
@@ -76,7 +72,6 @@ router.post('/', protect, async (req, res) => {
 // PUT /api/products/:id - Update a product (Admin Only)
 router.put('/:id', protect, async (req, res) => {
   const { id } = req.params;
-  // We now receive logoId instead of logoName
   const { name, partnerName, registrationDate, price, profitPercentage, description, logoId, brandName, imageUrl } = req.body;
 
   try {
@@ -86,9 +81,6 @@ router.put('/:id', protect, async (req, res) => {
       create: { name: brandName },
     });
     
-    // The old logo upsert logic is REMOVED.
-
-    // ... inside the PUT route ...
 const updatedProduct = await prisma.product.update({
     where: { id: parseInt(id) },
     data: {

@@ -3,37 +3,35 @@ import React, { useState, useEffect } from 'react';
 import { useForm, Controller } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 import {
-    Box, Typography, TextField, Button, Grid, CircularProgress, Autocomplete,
+    Box, Typography, TextField, Button, Grid, CircularProgress,
     Snackbar, Alert, FormControl, InputLabel, Select, MenuItem, FormHelperText
 } from '@mui/material';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import AddIcon from '@mui/icons-material/Add';
-import type { Brand, Logo } from '../types';
+import type { Logo } from '../types';
 import api from '../services/api';
-import { NewLogoModal } from '../components/NewLogoModal'; // Import our new modal
+import { NewLogoModal } from '../components/NewLogoModal';
 
 // This interface defines all the fields in our form
 interface IFormInputs {
     name: string;
     partnerName: string;
-    price: number;
+    price: number | '';
     profitPercentage: number;
     description: string;
     imageUrl: string;
-    brandName: string | null;
-    logoId: number | ''; // We now use logoId
+    logoId: number | '';
     registrationDate: Date | null;
 }
 
 const AddProductPage = () => {
-    const { control, handleSubmit, setValue, watch, formState: { errors } } = useForm<IFormInputs>({
+    const { control, handleSubmit, setValue, formState: { errors } } = useForm<IFormInputs>({
         defaultValues: {
-            name: '', partnerName: '', price: 0, profitPercentage: 30, description: '',
-            imageUrl: '', brandName: null, logoId: '', registrationDate: null,
+            name: '', partnerName: '', price: '', profitPercentage: 30, description: '',
+            imageUrl: '', logoId: '', registrationDate: null,
         }
     });
     const navigate = useNavigate();
-    const [brands, setBrands] = useState<string[]>([]);
     const [logos, setLogos] = useState<Logo[]>([]);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [loading, setLoading] = useState(false);
@@ -44,20 +42,26 @@ const AddProductPage = () => {
     };
 
     useEffect(() => {
-        api.get('/lists/brands').then(res => setBrands(res.data.map((b: Brand) => b.name)));
         fetchLogos();
     }, []);
 
-    const handlePriceChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const rawValue = e.target.value.replace(/,/g, ''); // Remove formatting commas
-    const numValue = parseInt(rawValue, 10);
-    setValue('price', isNaN(numValue) ? 0 : numValue);
-    };
     const onSubmit = async (data: IFormInputs) => {
         setLoading(true);
         try {
+            const selectedLogo = logos.find(logo => logo.id === data.logoId);
+            if (!selectedLogo) {
+                setSnackbar({ open: true, message: 'Please select a logo.', severity: 'error' });
+                setLoading(false);
+                return;
+            }
+    
+            const productData = {
+                ...data,
+                brandName: selectedLogo.name,
+            };
+    
             const token = localStorage.getItem('authToken');
-            await api.post('/products', data, { headers: { Authorization: `Bearer ${token}` } });
+            await api.post('/products', productData, { headers: { Authorization: `Bearer ${token}` } });
             setSnackbar({ open: true, message: 'محصول با موفقیت اضافه شد!', severity: 'success' });
             setTimeout(() => navigate('/admin'), 2000);
         } catch (error) {
@@ -90,21 +94,6 @@ const AddProductPage = () => {
 
                     <Grid item xs={12} sm={6}>
                         <Controller name="partnerName" control={control} rules={{ required: 'نام همکار الزامی است' }} render={({ field }) => <TextField {...field} label="نام همکار" fullWidth error={!!errors.partnerName} helperText={errors.partnerName?.message} />} />
-                    </Grid>
-
-                    <Grid item xs={12} sm={6}>
-                       <Controller
-                            name="brandName"
-                            control={control}
-                            rules={{ required: 'برند الزامی است' }}
-                            render={({ field: { onChange, value } }) => (
-                                <Autocomplete
-                                    freeSolo options={brands} value={value}
-                                    onChange={(event, newValue) => onChange(newValue)}
-                                    renderInput={(params) => (<TextField {...params} label="برند" error={!!errors.brandName} helperText={errors.brandName?.message} />)}
-                                />
-                            )}
-                        />
                     </Grid>
                     
                     <Grid item xs={12} sm={6}>
@@ -142,11 +131,27 @@ const AddProductPage = () => {
                     </Grid>
                     
                     <Grid item xs={12} sm={6}>
-                       <TextField label="قیمت (ریال)" value={new Intl.NumberFormat('fa-IR').format(priceValue || 0)} onChange={handlePriceChange} fullWidth required />
+                        <Controller
+                            name="price"
+                            control={control}
+                            rules={{ required: 'Price is required' }}
+                            render={({ field }) => (
+                                <TextField
+                                    {...field}
+                                    label="قیمت (ریال)"
+                                    type="number"
+                                    fullWidth
+                                    required
+                                    error={!!errors.price}
+                                    helperText={errors.price?.message}
+                                    onChange={e => field.onChange(e.target.value === '' ? '' : parseInt(e.target.value, 10))}
+                                />
+                            )}
+                        />
                     </Grid>
                     
                     <Grid item xs={12} sm={6}>
-                        <Controller name="profitPercentage" control={control} render={({ field }) => <TextField {...field} label="درصد سود" type="number" fullWidth required />} />
+                        <Controller name="profitPercentage" control={control} rules={{ required: true }} render={({ field }) => <TextField {...field} label="درصد سود" type="number" fullWidth required />} />
                     </Grid>
 
                     <Grid item xs={12} sm={6}>

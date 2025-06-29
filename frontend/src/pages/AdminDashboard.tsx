@@ -47,10 +47,7 @@ const AdminDashboard = () => {
   };
 
   const handleEdit = (productId: number) => {
-      // We will implement this in a later step
-      // For now, it will navigate to a placeholder route
-      console.log('Navigate to edit page for product', productId);
-      // navigate(`/admin/edit-product/${productId}`);
+      navigate(`/admin/edit-product/${productId}`);
   };
 
   const formatPrice = (price: number) => new Intl.NumberFormat('fa-IR').format(price) + ' ریال';
@@ -82,8 +79,7 @@ const AdminDashboard = () => {
                   <Tooltip title="ویرایش">
                     <IconButton
                       color="primary"
-                      component={RouterLink}
-                      to={`/admin/edit-product/${product.id}`}
+                      onClick={() => handleEdit(product.id)}
                       >
                       <EditIcon />
                     </IconButton>

@@ -1,5 +1,5 @@
 // src/App.tsx
-import React, { useState, useMemo, createContext } from 'react';
+import React, { useState, useMemo } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -16,7 +16,7 @@ import AdminLayout from './components/AdminLayout';
 import AddProductPage from './pages/AddProductPage';
 import EditProductPage from './pages/EditProductPage';
 
-export const ColorModeContext = createContext({ toggleColorMode: () => {} });
+import { ColorModeContext } from './ColorModeContext';
 
 function App() {
   const [mode, setMode] = useState<'light' | 'dark'>('light');

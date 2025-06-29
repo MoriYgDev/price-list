@@ -3,6 +3,7 @@ import { Router } from 'express';
 import { PrismaClient } from '@prisma/client';
 import multer from 'multer';
 import path from 'path';
+import { protect } from '../middleware/authMiddleware.js'; // Import the protect middleware
 
 const prisma = new PrismaClient();
 const router = Router();
@@ -34,7 +35,7 @@ router.get('/logos', async (req, res) => {
 });
 
 // POST /api/lists/logos - Create a new logo WITH file upload
-router.post('/logos', upload.single('logoImage'), async (req, res) => {
+router.post('/logos', protect, upload.single('logoImage'), async (req, res) => { // Added protect middleware
     const { name } = req.body;
     const filePath = req.file ? `/uploads/${req.file.filename}` : null;
 

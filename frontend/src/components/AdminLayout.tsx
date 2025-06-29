@@ -22,7 +22,7 @@ const AdminLayout = () => {
     };
 
     const menuItems = [
-        { text: 'داشبورد', icon: <DashboardIcon sx={{ ml: 1 }}/>, path: '/admin' }, // Added margin for RTL
+        { text: 'داشبورد', icon: <DashboardIcon sx={{ ml: 1 }}/>, path: '/admin' },
         { text: 'اضافه کردن محصول', icon: <AddCircleOutlineIcon sx={{ ml: 1 }}/>, path: '/admin/add-product' }
     ];
 
@@ -31,7 +31,7 @@ const AdminLayout = () => {
             <CssBaseline />
             <AppBar
                 position="fixed"
-                sx={{ width: `calc(100% - ${drawerWidth}px)`, mr: `${drawerWidth}px` }} // mr for right-hand drawer
+                sx={{ width: `calc(100% - ${drawerWidth}px)`, mr: `${drawerWidth}px` }}
             >
                 <Toolbar sx={{ justifyContent: 'space-between' }}>
                     <Typography variant="h6" noWrap component="div">
@@ -58,7 +58,7 @@ const AdminLayout = () => {
                     },
                 }}
                 variant="permanent"
-                anchor="right" // This places the drawer on the right for RTL
+                anchor="right"
             >
                 <Toolbar />
                 <Box sx={{ overflow: 'auto' }}>
@@ -77,13 +77,13 @@ const AdminLayout = () => {
                 </Box>
             </Drawer>
 
-            {/* This is the main content area where the different admin pages will appear */}
+            {/* Main content area - The `width` property has been removed from here */}
             <Box
                 component="main"
-                sx={{ flexGrow: 1, p: 3, width: `calc(100% - ${drawerWidth}px)` }}
+                sx={{ flexGrow: 1, p: 3 }}
             >
                 <Toolbar />
-                <Outlet /> {/* Child routes like AdminDashboard, AddProductPage, etc., render here */}
+                <Outlet />
             </Box>
         </Box>
     );

@@ -1,5 +1,5 @@
 // src/pages/ClientPage.tsx
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect, useMemo, useContext } from 'react';
 import { Link as RouterLink } from 'react-router-dom';
 import {
   Container, Typography, TextField, Table, TableBody, TableCell,
@@ -12,11 +12,10 @@ import api from '../services/api';
 import type { Product } from '../types'; // CORRECTED IMPORT
 import moment from 'jalali-moment';
 
-import { useContext } from 'react';
 import { useTheme } from '@mui/material/styles';
 import Brightness4Icon from '@mui/icons-material/Brightness4';
 import Brightness7Icon from '@mui/icons-material/Brightness7';
-import { ColorModeContext } from '../App';
+import { ColorModeContext } from '../ColorModeContext';
 import MyLogo from '../assets/afratec asli.png';
 type Order = 'asc' | 'desc';
 type SortableKeys = keyof Product | 'brand' | 'logo';
