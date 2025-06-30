@@ -27,6 +27,7 @@ const AdminDashboard = () => {
 
   // Fetch products when the component loads
   useEffect(() => {
+    document.title = 'افراتک | داشبورد مدیریت';
     fetchProducts();
   }, []);
 
