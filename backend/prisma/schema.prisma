@@ -35,7 +35,6 @@ model Product {
   price             Float
   profitPercentage  Float    @default(30)
   description       String?
-  imageUrl          String?
   createdAt         DateTime @default(now())
   updatedAt         DateTime @updatedAt
 
