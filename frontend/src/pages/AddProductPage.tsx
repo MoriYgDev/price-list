@@ -87,15 +87,49 @@ const AddProductPage = () => {
             <form onSubmit={handleSubmit(onSubmit)}>
                 <Grid container spacing={3}>
                     {/* All Form Fields */}
-                    <Grid item xs={12} sm={6}>
-                        <Controller name="name" control={control} rules={{ required: 'نام محصول الزامی است' }} render={({ field }) => <TextField {...field} label="نام محصول" fullWidth error={!!errors.name} helperText={errors.name?.message} />} />
+                    <Grid xs={12} sm={6}>
+                        <Controller
+                            name="name"
+                            control={control}
+                            rules={{ required: 'نام محصول الزامی است' }}
+                            render={({ field: { onChange, onBlur, value, name, ref } }) => (
+                                <TextField
+                                    label="نام محصول"
+                                    fullWidth
+                                    error={!!errors.name}
+                                    helperText={errors.name?.message}
+                                    onChange={onChange}
+                                    onBlur={onBlur}
+                                    value={value}
+                                    name={name}
+                                    inputRef={ref}
+                                />
+                            )}
+                        />
                     </Grid>
 
-                    <Grid item xs={12} sm={6}>
-                        <Controller name="partnerName" control={control} rules={{ required: 'نام همکار الزامی است' }} render={({ field }) => <TextField {...field} label="نام همکار" fullWidth error={!!errors.partnerName} helperText={errors.partnerName?.message} />} />
+                    <Grid xs={12} sm={6}>
+                        <Controller
+                            name="partnerName"
+                            control={control}
+                            rules={{ required: 'نام همکار الزامی است' }}
+                            render={({ field: { onChange, onBlur, value, name, ref } }) => (
+                                <TextField
+                                    label="نام همکار"
+                                    fullWidth
+                                    error={!!errors.partnerName}
+                                    helperText={errors.partnerName?.message}
+                                    onChange={onChange}
+                                    onBlur={onBlur}
+                                    value={value}
+                                    name={name}
+                                    inputRef={ref}
+                                />
+                            )}
+                        />
                     </Grid>
 
-                    <Grid item xs={12} sm={6}>
+                    <Grid xs={12} sm={6}>
                         <Box sx={{ display: 'flex', alignItems: 'flex-start' }}>
                             <Controller
                                 name="logoId"
@@ -118,46 +152,95 @@ const AddProductPage = () => {
                         </Box>
                     </Grid>
 
-                    <Grid item xs={12} sm={6}>
+                    <Grid xs={12} sm={6}>
                         <Controller
-                            name="registrationDate" control={control} rules={{ required: 'تاریخ ثبت الزامی است' }}
+                            name="registrationDate"
+                            control={control}
+                            rules={{ required: 'تاریخ ثبت الزامی است' }}
                             render={({ field }) => (
-                                <DatePicker {...field} label="تاریخ ثبت قیمت" sx={{ width: '100%' }}
-                                    slotProps={{ textField: { error: !!errors.registrationDate, helperText: errors.registrationDate?.message, }, }}
+                                <DatePicker
+                                    {...field}
+                                    label="تاریخ ثبت قیمت"
+                                    sx={{ width: '100%' }}
+                                    slots={{
+                                        textField: (params) => (
+                                            <TextField
+                                                {...params}
+                                                error={!!errors.registrationDate}
+                                                helperText={errors.registrationDate?.message}
+                                            />
+                                        ),
+                                    }}
                                 />
                             )}
                         />
                     </Grid>
 
-                    <Grid item xs={12} sm={6}>
+                    <Grid xs={12} sm={6}>
                         <Controller
                             name="price"
                             control={control}
                             rules={{ required: 'Price is required' }}
-                            render={({ field }) => (
+                            render={({ field: { onChange, onBlur, value, name, ref } }) => (
                                 <TextField
-                                    {...field}
                                     label="قیمت (ریال)"
                                     type="number"
                                     fullWidth
                                     required
                                     error={!!errors.price}
                                     helperText={errors.price?.message}
-                                    onChange={e => field.onChange(e.target.value === '' ? '' : parseInt(e.target.value, 10))}
+                                    onBlur={onBlur}
+                                    name={name}
+                                    inputRef={ref}
+                                    value={value}
+                                    onChange={e => onChange(e.target.value === '' ? '' : parseInt(e.target.value, 10))}
                                 />
                             )}
                         />
                     </Grid>
 
-                    <Grid item xs={12} sm={6}>
-                        <Controller name="profitPercentage" control={control} rules={{ required: true }} render={({ field }) => <TextField {...field} label="درصد سود" type="number" fullWidth required />} />
+                    <Grid xs={12} sm={6}>
+                        <Controller
+                            name="profitPercentage"
+                            control={control}
+                            rules={{ required: true }}
+                            render={({ field: { onChange, onBlur, value, name, ref } }) => (
+                                <TextField
+                                    label="درصد سود"
+                                    type="number"
+                                    fullWidth
+                                    required
+                                    onChange={onChange}
+                                    onBlur={onBlur}
+                                    value={value}
+                                    name={name}
+                                    inputRef={ref}
+                                />
+                            )}
+                        />
                     </Grid>
 
-                    <Grid item xs={12}>
-                        <Controller name="description" control={control} render={({ field }) => <TextField {...field} label="توضیحات" multiline rows={4} fullWidth />} />
+                    <Grid xs={12}>
+                        <Controller
+                             name="description"
+                             control={control}
+                             render={({ field: { onChange, onBlur, value, name, ref } }) => (
+                                 <TextField
+                                     label="توضیحات"
+                                     multiline
+                                     rows={4}
+                                     fullWidth
+                                     onChange={onChange}
+                                     onBlur={onBlur}
+                                     value={value}
+                                     name={name}
+                                     inputRef={ref}
+                                 />
+                             )}
+                        />
                     </Grid>
 
-                    <Grid item xs={12}>
+                    <Grid xs={12}>
                         <Button type="submit" variant="contained" color="primary" disabled={loading}>
                             {loading ? <CircularProgress size={24} /> : 'ذخیره محصول'}
                         </Button>

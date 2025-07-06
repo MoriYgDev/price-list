@@ -159,8 +159,10 @@ const EditProductPage = () => {
                             name="registrationDate" control={control} rules={{ required: 'تاریخ ثبت الزامی است' }}
                             render={({ field }) => (
                                 <DatePicker
-                                    {...field} label="تاریخ ثبت قیمت" sx={{ width: '100%' }}
-                                    slotProps={{ textField: { error: !!errors.registrationDate, helperText: errors.registrationDate?.message, }, }}
+                                    {...field}
+                                    label="تاریخ ثبت قیمت"
+                                    sx={{ width: '100%' }}
+                                    slots={{ textField: (params) => <TextField {...params} error={!!errors.registrationDate} helperText={errors.registrationDate?.message} /> }}
                                 />
                             )}
                         />
