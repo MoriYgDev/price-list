@@ -186,7 +186,7 @@ const EditProductPage = () => {
                             )}
                         />
                     </Grid>
-                    <Grid item xs={12} sm={6}>
+                    <Grid item xs={12}>
                         <Controller name="profitPercentage" control={control} render={({ field }) => <TextField {...field} label="درصد سود" type="number" fullWidth required />} />
                     </Grid>
                     <Grid item xs={12}>
