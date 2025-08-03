@@ -86,7 +86,6 @@ const AddProductPage = () => {
             <Typography variant="h4" gutterBottom>اضافه کردن محصول جدید</Typography>
             <form onSubmit={handleSubmit(onSubmit)}>
                 <Grid container spacing={3}>
-                    {/* The 'item' prop is required here */}
                     <Grid item xs={12} sm={6}>
                         <Controller
                             name="name"
@@ -104,8 +103,6 @@ const AddProductPage = () => {
                             )}
                         />
                     </Grid>
-
-                    {/* The 'item' prop is required here */}
                     <Grid item xs={12} sm={6}>
                         <Controller
                             name="partnerName"
@@ -123,8 +120,6 @@ const AddProductPage = () => {
                             )}
                         />
                     </Grid>
-
-                    {/* The 'item' prop is required here */}
                     <Grid item xs={12} sm={6}>
                         <Controller
                             name="brandName"
@@ -152,8 +147,6 @@ const AddProductPage = () => {
                             )}
                         />
                     </Grid>
-
-                    {/* The 'item' prop is required here */}
                     <Grid item xs={12} sm={6}>
                         <Box sx={{ display: 'flex', alignItems: 'flex-start' }}>
                             <Controller
@@ -176,8 +169,6 @@ const AddProductPage = () => {
                             <Button title="افزودن لوگوی جدید" onClick={() => setIsModalOpen(true)} variant="outlined" sx={{ ml: 1, minWidth: '56px', height: '56px' }}><AddIcon /></Button>
                         </Box>
                     </Grid>
-
-                    {/* The 'item' prop is required here */}
                     <Grid item xs={12} sm={6}>
                         <Controller
                             name="registrationDate"
@@ -202,8 +193,6 @@ const AddProductPage = () => {
                             )}
                         />
                     </Grid>
-
-                    {/* The 'item' prop is required here */}
                     <Grid item xs={12} sm={6}>
                         <Controller
                             name="price"
@@ -223,9 +212,7 @@ const AddProductPage = () => {
                             )}
                         />
                     </Grid>
-
-                    {/* The 'item' prop is required here */}
-                    <Grid item xs={12} sm={6}>
+                    <Grid item xs={12}>
                         <Controller
                             name="profitPercentage"
                             control={control}
@@ -240,8 +227,6 @@ const AddProductPage = () => {
                             )}
                         />
                     </Grid>
-
-                    {/* The 'item' prop is required here */}
                     <Grid item xs={12}>
                         <Controller
                              name="description"
@@ -257,8 +242,6 @@ const AddProductPage = () => {
                              )}
                         />
                     </Grid>
-
-                    {/* The 'item' prop is required here */}
                     <Grid item xs={12}>
                         <Button type="submit" variant="contained" color="primary" disabled={loading}>
                             {loading ? <CircularProgress size={24} /> : 'ذخیره محصول'}
