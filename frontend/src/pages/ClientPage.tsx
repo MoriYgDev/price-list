@@ -17,6 +17,10 @@ import Brightness4Icon from '@mui/icons-material/Brightness4';
 import Brightness7Icon from '@mui/icons-material/Brightness7';
 import { ColorModeContext } from '../ColorModeContext';
 import MyLogo from '../assets/afratec asli.png';
+
+// FIX: Get the base URL for backend static assets from an environment variable.
+const BACKEND_STATIC_URL = import.meta.env.VITE_BACKEND_STATIC_URL || 'http://localhost:3001';
+
 type Order = 'asc' | 'desc';
 type SortableKeys = keyof Product | 'brand' | 'logo';
 
@@ -27,7 +31,9 @@ const Row = (props: { product: Product }) => {
     const finalPrice = product.price * (1 + product.profitPercentage / 100);
     const formatPrice = (price: number) => new Intl.NumberFormat('fa-IR').format(price) + ' ریال';
     const formatDate = (date: string) => moment(date).locale('fa').format('YYYY/MM/DD');
-    const backendUrl = 'http://localhost:3001';
+    
+    // FIX: Use the environment variable for the backend URL to make image paths correct in any environment.
+    const backendUrl = BACKEND_STATIC_URL;
 
     return (
         <React.Fragment>

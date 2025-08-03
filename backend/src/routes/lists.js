@@ -35,7 +35,8 @@ router.get('/logos', async (req, res) => {
 });
 
 // POST /api/lists/logos - Create a new logo WITH file upload
-router.post('/logos', protect, upload.single('logoImage'), async (req, res) => { // Added protect middleware
+// FIX: Added the 'protect' middleware to secure this route.
+router.post('/logos', protect, upload.single('logoImage'), async (req, res) => {
     const { name } = req.body;
     const filePath = req.file ? `/uploads/${req.file.filename}` : null;
 
