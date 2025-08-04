@@ -1,5 +1,5 @@
 // src/App.tsx
-import React, { useState, useMemo, useEffect } from 'react'; // Import useEffect
+import React, { useState, useMemo } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -9,6 +9,7 @@ import { getDesignTokens } from './theme';
 // Import all pages and components
 import LoginPage from './pages/LoginPage';
 import ClientPage from './pages/ClientPage';
+// ... import all other components ...
 import AdminDashboard from './pages/AdminDashboard';
 import ProtectedRoute from './components/ProtectedRoute';
 import AdminLayout from './components/AdminLayout';
@@ -18,12 +19,7 @@ import EditProductPage from './pages/EditProductPage';
 import { ColorModeContext } from './ColorModeContext';
 
 function App() {
-  // Initialize mode based on system preference
-  const [mode, setMode] = useState<'light' | 'dark'>(() => {
-    const prefersDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches;
-    return prefersDarkMode ? 'dark' : 'light';
-  });
-
+  const [mode, setMode] = useState<'light' | 'dark'>('light');
   const colorMode = useMemo(
     () => ({
       toggleColorMode: () => {
@@ -32,21 +28,7 @@ function App() {
     }),
     [],
   );
-
   const theme = useMemo(() => createTheme(getDesignTokens(mode)), [mode]);
-
-  // Listen for system theme changes
-  useEffect(() => {
-    const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
-    const handleChange = (event: MediaQueryListEvent) => {
-      setMode(event.matches ? 'dark' : 'light');
-    };
-
-    mediaQuery.addEventListener('change', handleChange);
-    return () => {
-      mediaQuery.removeEventListener('change', handleChange);
-    };
-  }, []);
 
   return (
     <ColorModeContext.Provider value={colorMode}>

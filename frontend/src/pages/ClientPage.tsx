@@ -82,7 +82,6 @@ const ClientPage = () => {
   const theme = useTheme();
   const colorMode = useContext(ColorModeContext);
   useEffect(() => {
-    document.title = 'افراتک | لیست قیمت محصولات';
     setLoading(true);
     setError(null);
     api.get('/products')

@@ -1,5 +1,5 @@
 // src/pages/LoginPage.tsx
-import React, { useState ,useEffect } from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
   Container,
@@ -14,7 +14,6 @@ import {
 } from '@mui/material';
 import api from '../services/api';
 import MyLogo from '../assets/afratec asli.png';
-
 
 // If you have a logo file in your src/assets folder, you can uncomment this
 // import MyLogo from '../assets/logo.png';
@@ -38,10 +37,6 @@ const LoginPage = () => {
       console.error(err);
     }
   };
-  useEffect(() => {
-    document.title = 'افراتک | ورود به پنل مدیریت'; // Set the specific title for LoginPage
-  }, []); //
-
 
   return (
     // 1. Full-screen container that centers its content vertically and horizontally
@@ -112,11 +107,6 @@ const LoginPage = () => {
       </Paper>
     </Box>
   );
-
-
 };
-
-
-
 
 export default LoginPage;

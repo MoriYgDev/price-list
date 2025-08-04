@@ -52,7 +52,6 @@ const EditProductPage = () => {
     };
 
     useEffect(() => {
-        document.title = 'افراتک | ویرایش محصول';
         api.get('/lists/brands').then(res => setBrands(res.data.map((b: Brand) => b.name)));
         fetchLogos();
 
