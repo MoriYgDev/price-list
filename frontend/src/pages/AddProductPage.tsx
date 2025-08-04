@@ -24,6 +24,7 @@ interface IFormInputs {
 }
 
 const AddProductPage = () => {
+    // --- React Hook Form ---
     const { control, handleSubmit, setValue, formState: { errors } } = useForm<IFormInputs>({
         defaultValues: {
             name: '',
@@ -37,6 +38,7 @@ const AddProductPage = () => {
         }
     });
 
+    // --- Component State ---
     const navigate = useNavigate();
     const [brands, setBrands] = useState<string[]>([]);
     const [logos, setLogos] = useState<Logo[]>([]);
@@ -44,32 +46,47 @@ const AddProductPage = () => {
     const [loading, setLoading] = useState(false);
     const [snackbar, setSnackbar] = useState<{ open: boolean, message: string, severity: 'success' | 'error' } | null>(null);
 
+    /**
+     * Fetches the list of logos from the API.
+     */
     const fetchLogos = () => {
         api.get('/lists/logos').then(res => setLogos(res.data));
     };
 
+    // --- Fetch initial data ---
     useEffect(() => {
         document.title = 'افراتک | افزودن محصول';
         api.get('/lists/brands').then(res => setBrands(res.data.map((b: Brand) => b.name)));
         fetchLogos();
     }, []);
 
+    /**
+     * Handles the form submission for adding a new product.
+     * @param {IFormInputs} data - The form data.
+     */
     const onSubmit = async (data: IFormInputs) => {
         setLoading(true);
         try {
+            // --- Make API call to add product ---
             const token = localStorage.getItem('authToken');
             await api.post('/products', data, {
                 headers: { Authorization: `Bearer ${token}` }
             });
+            // --- Show success message and navigate to admin page ---
             setSnackbar({ open: true, message: 'محصول با موفقیت اضافه شد!', severity: 'success' });
             setTimeout(() => navigate('/admin'), 2000);
         } catch (error) {
+            // --- Show error message ---
             console.error('Failed to add product', error);
             setSnackbar({ open: true, message: 'خطا در اضافه کردن محصول', severity: 'error' });
             setLoading(false);
         }
     };
 
+    /**
+     * Handles the successful creation of a new logo.
+     * @param {Logo} newLogo - The new logo object.
+     */
     const handleNewLogoSuccess = (newLogo: Logo) => {
         fetchLogos();
         setValue('logoId', newLogo.id);
