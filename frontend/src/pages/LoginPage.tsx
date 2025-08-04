@@ -19,22 +19,29 @@ import MyLogo from '../assets/afratec asli.png';
 // import MyLogo from '../assets/logo.png';
 
 const LoginPage = () => {
+  // --- Component State ---
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const navigate = useNavigate();
 
+  /**
+   * Handles the form submission for logging in.
+   * @param {React.FormEvent} event - The form submission event.
+   */
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
     setError('');
     try {
+      // --- Make API call to login ---
       const response = await api.post('/auth/login', { username, password });
       const { token } = response.data;
+      // --- Store token and navigate to admin page ---
       localStorage.setItem('authToken', token);
       navigate('/admin');
-    } catch (err) {
+    } catch (err: any) {
+      // --- Set error message on failure ---
       setError('نام کاربری یا رمز عبور اشتباه است.');
-      console.error(err);
     }
   };
 

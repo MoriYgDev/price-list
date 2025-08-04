@@ -1,18 +1,14 @@
-// backend/src/routes/products.js
 import { Router } from 'express';
 import { PrismaClient } from '@prisma/client';
-import { protect } from '../middleware/authMiddleware.js';
 import { body, param, validationResult } from 'express-validator';
 import asyncHandler from 'express-async-handler';
 
 const prisma = new PrismaClient();
 const router = Router();
 
-/**
- * @route   GET /api/products
- * @desc    Get all products
- * @access  Public
- */
+// This router is for testing purposes only. It does not include the 'protect' middleware.
+
+// GET /api/products - Get all products (Public)
 router.get('/', asyncHandler(async (req, res) => {
   const products = await prisma.product.findMany({
     include: { logo: true, brand: true },
@@ -21,11 +17,7 @@ router.get('/', asyncHandler(async (req, res) => {
   res.json(products);
 }));
 
-/**
- * @route   GET /api/products/:id
- * @desc    Get a single product by ID
- * @access  Public
- */
+// GET /api/products/:id - Get a single product by ID (Public)
 router.get('/:id', asyncHandler(async (req, res) => {
   const { id } = req.params;
   const product = await prisma.product.findUnique({
@@ -40,16 +32,10 @@ router.get('/:id', asyncHandler(async (req, res) => {
   }
 }));
 
-/**
- * @route   POST /api/products
- * @desc    Create a new product
- * @access  Private/Admin
- */
+// POST /api/products - Create a new product (Admin Only)
 router.post(
   '/',
-  protect,
   [
-    // Validation middleware
     body('name').not().isEmpty().withMessage('Name is required'),
     body('partnerName').not().isEmpty().withMessage('Partner name is required'),
     body('registrationDate').isISO8601().withMessage('Invalid date format'),
@@ -59,7 +45,6 @@ router.post(
     body('brandName').not().isEmpty().withMessage('Brand name is required'),
   ],
   asyncHandler(async (req, res) => {
-    // Check for validation errors
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
       res.status(400);
@@ -68,14 +53,12 @@ router.post(
 
     const { name, partnerName, registrationDate, price, profitPercentage, description, logoId, brandName } = req.body;
 
-    // Create or update brand
     const brand = await prisma.brand.upsert({
       where: { name: brandName },
       update: {},
       create: { name: brandName },
     });
 
-    // Create new product
     const newProduct = await prisma.product.create({
       data: {
         name,
@@ -93,16 +76,10 @@ router.post(
   })
 );
 
-/**
- * @route   PUT /api/products/:id
- * @desc    Update a product
- * @access  Private/Admin
- */
+// PUT /api/products/:id - Update a product (Admin Only)
 router.put(
   '/:id',
-  protect,
   [
-    // Validation middleware
     param('id').isInt({ gt: 0 }).withMessage('ID must be a positive integer'),
     body('name').not().isEmpty().withMessage('Name is required'),
     body('partnerName').not().isEmpty().withMessage('Partner name is required'),
@@ -113,7 +90,6 @@ router.put(
     body('brandName').not().isEmpty().withMessage('Brand name is required'),
   ],
   asyncHandler(async (req, res) => {
-    // Check for validation errors
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
       res.status(400);
@@ -123,14 +99,12 @@ router.put(
     const { id } = req.params;
     const { name, partnerName, registrationDate, price, profitPercentage, description, logoId, brandName } = req.body;
 
-    // Create or update brand
     const brand = await prisma.brand.upsert({
       where: { name: brandName },
       update: {},
       create: { name: brandName },
     });
 
-    // Update product
     const updatedProduct = await prisma.product.update({
       where: { id: parseInt(id) },
       data: {
@@ -149,20 +123,13 @@ router.put(
   })
 );
 
-/**
- * @route   DELETE /api/products/:id
- * @desc    Delete a product
- * @access  Private/Admin
- */
+// DELETE /api/products/:id - Delete a product (Admin Only)
 router.delete(
   '/:id',
-  protect,
   [
-    // Validation middleware
     param('id').isInt({ gt: 0 }).withMessage('ID must be a positive integer'),
   ],
   asyncHandler(async (req, res) => {
-    // Check for validation errors
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
       res.status(400);

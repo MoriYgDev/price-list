@@ -2,40 +2,56 @@ import { Router } from 'express';
 import { PrismaClient } from '@prisma/client';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
+import { body, validationResult } from 'express-validator';
+import asyncHandler from 'express-async-handler';
 
 const prisma = new PrismaClient();
 const router = Router();
-const JWT_SECRET = process.env.JWT_SECRET || 'your-super-secret-key';
+const JWT_SECRET = process.env.JWT_SECRET;
 
-// POST /api/auth/login
-router.post('/login', async (req, res) => {
-  const { username, password } = req.body;
+/**
+ * @route   POST /api/auth/login
+ * @desc    Authenticate user and get token
+ * @access  Public
+ */
+router.post(
+  '/login',
+  [
+    // Validate username and password
+    body('username', 'نام کاربری الزامی است').not().isEmpty(),
+    body('password', 'رمز عبور الزامی است').not().isEmpty(),
+  ],
+  asyncHandler(async (req, res) => {
+    // Check for validation errors
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      res.status(400);
+      throw new Error(errors.array().map(e => e.msg).join(', '));
+    }
 
-  if (!username || !password) {
-    return res.status(400).json({ message: 'نام کاربری و رمز عبور الزامی است' });
-  }
+    const { username, password } = req.body;
 
-  try {
+    // Check for user
     const user = await prisma.user.findUnique({ where: { username } });
     if (!user) {
-      return res.status(401).json({ message: 'نام کاربری یا رمز عبور اشتباه است' });
+      res.status(401);
+      throw new Error('نام کاربری یا رمز عبور اشتباه است');
     }
 
+    // Check password
     const isPasswordValid = await bcrypt.compare(password, user.password);
     if (!isPasswordValid) {
-      return res.status(401).json({ message: 'نام کاربری یا رمز عبور اشتباه است' });
+      res.status(401);
+      throw new Error('نام کاربری یا رمز عبور اشتباه است');
     }
 
+    // Create JWT
     const token = jwt.sign({ userId: user.id, username: user.username }, JWT_SECRET, {
       expiresIn: '8h', // Token expires in 8 hours
     });
 
     res.json({ token });
-
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: 'خطای سرور' });
-  }
-});
+  })
+);
 
 export default router;
