@@ -6,7 +6,8 @@ import CssBaseline from '@mui/material/CssBaseline';
 import GlobalStyles from '@mui/material/GlobalStyles';
 import { getDesignTokens } from './theme';
 import { LocalizationProvider } from '@mui/x-date-pickers';
-import { AdapterDateFnsJalali } from '@mui/x-date-pickers/AdapterDateFnsJalaliV3'
+//import { AdapterDateFnsJalali } from '@mui/x-date-pickers/AdapterDateFnsJalaliV3'
+import { AdapterDateFnsJalali } from '@mui/x-date-pickers/AdapterDateFnsJalali'
 
 // Import all pages and components
 import LoginPage from './pages/LoginPage';
